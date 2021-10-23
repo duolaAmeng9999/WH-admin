@@ -54,6 +54,16 @@ export const constantRoutes = [
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
   },
+
+  {
+    name: "Product",
+    path: "/product",
+    component: Layout,
+    redirect: "/category/Category",
+    meta: { title: '商品管理', icon: 'el-icon-s-shop' }
+    
+  },
+
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
