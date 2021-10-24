@@ -55,13 +55,55 @@ export const constantRoutes = [
     }]
   },
 
+  // 商品管理模块
   {
     name: "Product",
     path: "/product",
     component: Layout,
-    redirect: "/category/Category",
-    meta: { title: '商品管理', icon: 'el-icon-s-shop' }
-    
+    redirect: "category/Category",
+    meta: { title: '商品管理', icon: 'el-icon-s-shop' },
+    children: [
+      {
+        name: "Liuwenjing",
+        path: "girlfriend/Liuwenjing",
+        component: () => import('@/views/product/girlfriend/Liuwenjing'),
+        meta: { title: 'My Girlfriend' }
+      },
+      {
+        name: "Category",
+        path: "category/Category",
+        component: () => import('@/views/product/category/Category'),
+        meta: { title: '商品分类' }
+
+      },
+
+      {
+        name: "Trademark",
+        path: "trademark/Trademark",
+        component: () => import('@/views/product/trademark/Trademark'),
+        meta: { title: '品牌管理' }
+      },
+      {
+        name: "Attr",
+        path: "attr/Attr",
+        component: () => import('@/views/product/attr/Attr'),
+        meta: { title: '属性管理' }
+      },
+      {
+        name: "Sku",
+        path: "sku/Sku",
+        component: () => import('@/views/product/sku/Sku'),
+        meta: { title: 'SKU' }
+      },
+      {
+        name: "Spu",
+        path: "spu/Spu",
+        component: () => import('@/views/product/spu/Spu'),
+        meta: { title: 'SPU' }
+      }
+    ]
+
+
   },
 
   // 404 page must be placed at the end !!!
