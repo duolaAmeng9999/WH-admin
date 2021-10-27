@@ -1,3 +1,4 @@
+// 品牌管理接口
 import request from "@/utils/request";
 const api_name = '/admin/product/baseTrademark'
 export default {

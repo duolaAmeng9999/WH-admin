@@ -17,6 +17,12 @@ import '@/permission' // permission control
 
 // 注册全局接口
 import * as API from "@/api/index";
+
+// 注册全局组件
+import CategorySelector from "@/components/CategorySelector"
+Vue.component("CategorySelector", CategorySelector)
+import HintButton from "@/components/HintButton"
+Vue.component("HintButton", HintButton)
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
