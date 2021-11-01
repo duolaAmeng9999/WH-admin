@@ -31,5 +31,9 @@ export default {
     // 关键字
     findBaseTrademarkByKeyWord(keyword) {
         return request.get(`${api_name}/findBaseTrademarkByKeyWord/${keyword}`);
-    }
+    },
+    // 获取所有品牌数据
+    getList() {
+        return request.get(`${api_name}/getTrademarkList`)
+    },
 }

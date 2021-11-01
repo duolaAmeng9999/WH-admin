@@ -3,7 +3,10 @@
     <!-- 第一 card 为三级分类的列表 -->
     <el-card class="box-card">
       <!-- 添加自定义事件, 来接收 子组件传递过来的 三级分类的 id, level -->
-      <CategorySelector @changeCategory="changeCategory"></CategorySelector>
+      <CategorySelector
+        @changeCategory="changeCategory"
+        :isShowList="isShowList"
+      ></CategorySelector>
     </el-card>
 
     <!-- 第二 card 为属性列表 -->
@@ -18,52 +21,54 @@
       >
 
       <!-- 属性列表 -->
-      <el-table :data="arrtList" style="width: 100%" stripe>
-        <el-table-column label="序号" width="80" align="center" type="index">
-        </el-table-column>
-        <el-table-column label="属性名称" prop="attrName"></el-table-column>
-        <el-table-column label="属性值列表" prop="valueName" align="center">
-          <template slot-scope="{ row }">
-            <el-tag
-              type="success"
-              v-for="value in row.attrValueList"
-              :key="value.id"
-              >{{ value.valueName }}</el-tag
-            >
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="180" align="center">
-          <!-- 作用域插槽 -->
-          <template slot-scope="scope" scope="{row}">
-            <!-- 公共组价, 修改和删除按钮 -->
-            <HintButton
-              size="mini"
-              class="el-icon-edit"
-              type="warning"
-              title="修改属性"
-              @click="handleEdit(row)"
-            ></HintButton>
-
-            <el-popconfirm
-              :title="`确认删除${row.attrName}吗？`"
-              @onConfirm="handleDelete(row)"
-            >
+      <div v-show="!isShowList">
+        <el-table :data="arrtList" style="width: 100%" stripe>
+          <el-table-column label="序号" width="80" align="center" type="index">
+          </el-table-column>
+          <el-table-column label="属性名称" prop="attrName"></el-table-column>
+          <el-table-column label="属性值列表" prop="valueName" align="center">
+            <template slot-scope="{ row }">
+              <el-tag
+                type="success"
+                v-for="value in row.attrValueList"
+                :key="value.id"
+                >{{ value.valueName }}</el-tag
+              >
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="180" align="center">
+            <!-- 作用域插槽 -->
+            <template slot-scope="scope" scope="{row}">
+              <!-- 公共组价, 修改和删除按钮 -->
               <HintButton
-                slot="reference"
                 size="mini"
-                class="el-icon-delete"
-                type="danger"
-                title="删除属性"
+                class="el-icon-edit"
+                type="warning"
+                title="修改属性"
+                @click="handleEdit(row)"
               ></HintButton>
-            </el-popconfirm>
-          </template>
-        </el-table-column>
-      </el-table>
+
+              <el-popconfirm
+                :title="`确认删除${row.attrName}吗？`"
+                @onConfirm="handleDelete(row)"
+              >
+                <HintButton
+                  slot="reference"
+                  size="mini"
+                  class="el-icon-delete"
+                  type="danger"
+                  title="删除属性"
+                ></HintButton>
+              </el-popconfirm>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
     </el-card>
 
     <!-- 添加或修改属性列表 -->
-    <div v-show="isShowList">
-      <el-card class="text">
+    <div>
+      <el-card class="text" v-show="isShowList">
         <!-- init 让内容为一行显示; 为表单单向绑定 data 里的 attrForm 数据 -->
         <el-form :inline="true" :data="attrForm">
           <el-form-item label="属性名">

@@ -1,6 +1,11 @@
 <template>
   <div>
-    <el-form :inline="true" class="demo-form-inline" v-model="cForm">
+    <el-form
+      :inline="true"
+      class="demo-form-inline"
+      v-model="cForm"
+      :disabled="isShowList"
+    >
       <el-form-item label="一级分类">
         <!-- change 默认收集 value 的值 -->
         <el-select
@@ -56,6 +61,7 @@
 <script>
 export default {
   name: "CategorySelector",
+  props: ["isShowList"],
   data() {
     return {
       cForm: {

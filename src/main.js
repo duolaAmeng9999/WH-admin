@@ -23,6 +23,11 @@ import CategorySelector from "@/components/CategorySelector"
 Vue.component("CategorySelector", CategorySelector)
 import HintButton from "@/components/HintButton"
 Vue.component("HintButton", HintButton)
+import SpuForm from "@/components/SpuForm"
+Vue.component("SpuForm", SpuForm)
+import SkuForm from "@/components/SkuForm"
+Vue.component("SkuForm", SkuForm)
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
