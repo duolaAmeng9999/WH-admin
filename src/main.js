@@ -28,6 +28,7 @@ Vue.component("SpuForm", SpuForm)
 import SkuForm from "@/components/SkuForm"
 Vue.component("SkuForm", SkuForm)
 
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

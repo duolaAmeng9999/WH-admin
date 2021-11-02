@@ -47,6 +47,7 @@
               size="mini"
               title="查看SKU"
               style="marginright: 10px"
+              @click="isShowDialog(row)"
             ></HintButton>
             <el-popconfirm
               :title="`确认删除${row.attrName}吗？`"
@@ -75,10 +76,9 @@
         ></SpuForm>
       </el-card>
     </div>
-
     <!-- SKU页 -->
     <div v-show="isShowSkuForm">
-      <el-card> <SkuForm ref="sku"></SkuForm> </el-card>
+      <el-card> <SkuForm ref="sku" @cancel="cancel"></SkuForm> </el-card>
     </div>
 
     <!-- 分页组件 -->
@@ -93,6 +93,39 @@
         :total="total"
       >
       </el-pagination>
+    </div>
+
+    <div>
+      <el-dialog title="spu.spuName" :visible.sync="dialogTableVisible">
+        <el-table :data="skuList">
+          <el-table-column
+            property="skuName"
+            label="名称"
+            width="280"
+            align="left"
+          ></el-table-column>
+          <el-table-column
+            property="price"
+            label="价格"
+            width="350"
+            align="right"
+          ></el-table-column>
+          <el-table-column
+            property="weight"
+            label="重量"
+            align="right"
+          ></el-table-column>
+          <el-table-column label="默认图片" width="100" align="center">
+            <template slot-scope="{ row, $index }">
+              <img
+                :src="row.skuDefaultImg"
+                alt=""
+                style="width: 60px; height: 80px"
+              />
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -111,7 +144,10 @@ export default {
       isShowList: false, // 控制属性列表的显示于隐藏默认隐藏 添加和修改属性列表
       isShowSpuForm: false,
       isShowSkuForm: false,
+      dialogTableVisible: false,
       spuList: [], // SPU 名称列表
+      spu: {},
+      skuList: [],
     };
   },
   methods: {
@@ -165,7 +201,11 @@ export default {
     showAddSku(row) {
       this.isShowList = true;
       this.isShowSkuForm = true;
-      this.$refs.sku.initAddSkuFormData(row, this.category1Id, this.category2Id);
+      this.$refs.sku.initAddSkuFormData(
+        row,
+        this.category1Id,
+        this.category2Id
+      );
     },
     // SPU 名称列表修改 Spu 按钮
     showUpdateSpu(row) {
@@ -173,6 +213,21 @@ export default {
       this.isShowSpuForm = true;
       this.flag = row.id;
       this.$refs.spu.initUpdateSpuFormData(row);
+    },
+    // 查看 SKU 按钮的回调
+    async isShowDialog(row) {
+      this.dialogTableVisible = true;
+      this.spu = row;
+      const result = await this.$API.sku.getListBySpuId(row.id);
+      if (result.code === 200) {
+        this.skuList = result.data;
+      }
+    },
+    // 关闭 dialog 对话框之前，于用处理 dialog 之前的数据
+    resetSkuList() {
+      this.skuList = [];
+      this.loading = false;
+      this.dialogTableVisible = false;
     },
     // SPU 名称列表删除 Spu 按钮
     handleDelete(row) {
@@ -183,6 +238,7 @@ export default {
     cancel() {
       this.isShowList = false;
       this.isShowSpuForm = false;
+      this.isShowSkuForm = false;
       this.flag = null;
     },
     // 保存数据的回调

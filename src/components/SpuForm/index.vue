@@ -165,7 +165,9 @@ export default {
     handleDelete(row) {},
 
     // 上传相关
+    // SPU 图片, 移除图片的回调函数, fileList 为移除之后的数据
     handleRemove(file, fileList) {
+      // 将移除移除图片的最新数据替换掉之前的数据
       this.spuImageList = fileList;
     },
     handleSuccess(response, file, fileList) {
@@ -198,6 +200,8 @@ export default {
       let result = await this.$API.spu.get(spu.id);
       if (result.code === 200) {
         this.spuForm = result.data;
+        console.log( resultx.data);
+
       }
 
       // 获取到SPU图片接口

@@ -2,7 +2,7 @@
   <div>
     <el-form label-width="80px" :model="skuForm">
       <el-form-item label="SPU名称">
-        <span>{{ spuName }}</span>
+        {{ spu.spuName }}
       </el-form-item>
 
       <el-form-item label="SKU名称">
@@ -14,10 +14,14 @@
       </el-form-item>
 
       <el-form-item label="重量(千克)">
-        <el-input v-model="skuForm.weight"></el-input>
+        <el-input
+          v-model="skuForm.weight"
+          placeholder="SKU重量"
+          type="number"
+        ></el-input>
       </el-form-item>
 
-      <el-form-item label="规格描述" prop="desc">
+      <el-form-item label="规格描述">
         <el-input
           type="textarea"
           placeholder="SKU规格描述"
@@ -37,6 +41,7 @@
                 v-for="attrValue in attr.attrValueList"
                 :key="attrValue.id"
                 :label="attrValue.valueName"
+                :value="`${attr.id}:${attrValue.id}`"
               >
               </el-option>
             </el-select>
@@ -59,6 +64,7 @@
                 v-for="spuSaleAttrValue in spuSaleAttr.spuSaleAttrValueList"
                 :key="spuSaleAttrValue.id"
                 :label="spuSaleAttrValue.saleAttrValueName"
+                :value="`${spuSaleAttrValue.id}: ${spuSaleAttr.id}`"
               >
               </el-option>
             </el-select>
@@ -131,6 +137,7 @@ export default {
   },
 
   methods: {
+    // 点击添加 SKU 按钮时的回调
     async initAddSkuFormData(row, category1Id, category2Id) {
       this.spu = row;
       const promise1 = await this.$API.attr.getList(
@@ -139,7 +146,7 @@ export default {
         row.category3Id
       );
       const promise2 = await this.$API.sku.getSpuSaleAttrList(row.id);
-      const promise3 = await this.$API.sku.getImageList(row.id);
+      const promise3 = await this.$API.sku.getSpuImageList(row.id);
       const result = await Promise.all([promise1, promise2, promise3]);
       this.attrList = result[0].data;
       this.spuSaleAttrList = result[1].data;
@@ -159,11 +166,60 @@ export default {
     },
 
     async save() {
+      console.log(this.skuForm.skuImageList);
+      alert(skuForm.skuImageList);
       let { skuForm, attrList, spuSaleAttrList, checkedImageList, spu } = this;
       skuForm.tmId = spu.tmId;
       skuForm.spuId = spu.id;
+      skuForm.category3Id = spu.category3Id;
+      skuForm.skuImageList = checkedImageList.map((item) => {
+        return {
+          imgName: item.imgName,
+          imgUrl: item.imgUrl,
+          isDefault: item.isDefault,
+          spuId: item.spuId,
+        };
+      });
+
+      skuForm.skuAttrValueList = attrList.reduce((pre, next) => {
+        if (next.attrIdValueId) {
+          let [attrId, valueId] = next.attrIdValueId.split(":");
+          let obj = {
+            attrId,
+            valueId,
+          };
+          pre.push(obj);
+        }
+        return pre;
+      }, []);
+      skuForm.skuSaleAttrValueList = spuSaleAttrList.reduce((pre, next) => {
+        if (next.spuAttrIdValueId) {
+          let [saleAttrId, saleAttrValueId] = next.spuAttrIdValueId.split(":");
+
+          let obj = {
+            saleAttrId,
+            saleAttrValueId,
+          };
+          pre.push(obj);
+        }
+        return pre;
+      }, []);
+
+      try {
+        await this.$API.sku.addUpdate(skuForm);
+        this.$message.success("保存成功");
+        this.$emit("cancel");
+        Object.assign(this.$data, this.$options.data());
+      } catch (error) {
+        this.$message.error("保存失败");
+      }
+    },
+    cancel() {
+      this.$emit("cancel");
+      Object.assign(this.$data, this.$options.data());
     },
   },
+  mounted() {},
 };
 </script>
 
