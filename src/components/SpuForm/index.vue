@@ -200,7 +200,7 @@ export default {
       let result = await this.$API.spu.get(spu.id);
       if (result.code === 200) {
         this.spuForm = result.data;
-        console.log( resultx.data);
+        console.log( result.data);
 
       }
 

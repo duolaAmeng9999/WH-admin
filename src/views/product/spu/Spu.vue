@@ -97,7 +97,7 @@
 
     <div>
       <el-dialog title="spu.spuName" :visible.sync="dialogTableVisible">
-        <el-table :data="skuList">
+        <el-table :data="skuList" v-loading="loading">
           <el-table-column
             property="skuName"
             label="名称"
@@ -116,10 +116,9 @@
             align="right"
           ></el-table-column>
           <el-table-column label="默认图片" width="100" align="center">
-            <template slot-scope="{ row, $index }">
+            <template slot-scope="{ row}">
               <img
                 :src="row.skuDefaultImg"
-                alt=""
                 style="width: 60px; height: 80px"
               />
             </template>
@@ -148,6 +147,7 @@ export default {
       spuList: [], // SPU 名称列表
       spu: {},
       skuList: [],
+      loading: false,
     };
   },
   methods: {
@@ -184,6 +184,7 @@ export default {
       // 将分页组件所选中的赋值给 data 中的 limit
       this.limit = val;
     },
+    // 分页接口
     async getSpuList(pager = 1) {
       this.page = pager;
       let { page, limit, category3Id } = this;
@@ -217,11 +218,13 @@ export default {
     // 查看 SKU 按钮的回调
     async isShowDialog(row) {
       this.dialogTableVisible = true;
+      this.loading = true;
       this.spu = row;
       const result = await this.$API.sku.getListBySpuId(row.id);
       if (result.code === 200) {
         this.skuList = result.data;
       }
+      this.loading = false;
     },
     // 关闭 dialog 对话框之前，于用处理 dialog 之前的数据
     resetSkuList() {
