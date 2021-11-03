@@ -10,3 +10,8 @@ export { default as category } from "./prouduct/category.js"
 export { default as spu } from "./prouduct/spu.js"
 // sku 相关接口
 export { default as sku } from "./prouduct/sku.js"
+
+export { default as permission } from './acl/permission'
+export { default as role } from './acl/role'
+
+export * as user from './acl/user'

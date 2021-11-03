@@ -30,7 +30,9 @@ import Layout from '@/layout'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
-// 常量路由, 拥护都可以访问的资源
+/*
+  常量路由：任意的用户都将会拥有的路由对象，并且这些用户都可以操作这些路由对象
+*/
 export const constantRoutes = [
   {
     path: '/login',
@@ -48,36 +50,39 @@ export const constantRoutes = [
     path: '/',
     component: Layout,
     redirect: '/dashboard',
-    children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: '首页', icon: 'dashboard' }
-    }]
-  },
+    children: [
+      {
+        path: 'dashboard',
+        name: 'Dashboard',
+        component: () => import('@/views/dashboard/index'),
+        meta: { title: '首页', icon: 'dashboard' }
+      }
+    ]
+  }
 
-
+  // 404 page must be placed at the end !!!
 ]
 
-/* 
-    异步路由：
-        - 就是用户可能拥有他其中的一部分路由对象, 他是异步生成的, 是动态的
-        - 将异步路由与后台返回的 routes 进行对比, 已确定显示那些路由
-     
-    资源分配：
-        - 想要进行资源分配的前提为有静态资源; 并且需要现有资源进行合理分配, 他是静态的资源
-        - 静态资源想要灵活运用; 指的是将产品分给 张三, 权限分配给 李四, 订单人给 王五......
-        - 对资源分配是无法超出现已有的固有资源, 如果想要分配更多的资源, 那么就需要探索开发新的资源
+/*
+异步路由：就是用户可能拥有它其中的一部分路由对象，它是异步生成的，是动态的。所以它将会与后台返回的routes进行对比，以确定哪些路由到底显示与不显示
+
+已经开采的矿
+
+想要进行资源的分配，前提是有资源，并且根据现有的资源进行的是合理分配，所谓的allAsyncRoutes其实是一个静态资源路由，它是“死”的
+“死”的资源想要灵活用，指的是产品我想分配给“张三”，权限分配给“李四”，订单分配给“王五”...
+对资源的分配是无法超出现在已经固有的资源，如果想要更多的资源分配，那么就需要探索开采新的资源
 */
 export const allAsyncRoutes = [
-
-  // 商品管理模块
+  /* 商品管理 */
   {
-    name: "Product",
-    path: "/product",
+    name: 'Product',
+    path: '/product',
     component: Layout,
     redirect: '/product/girlfriend/Liuwenjing',
-    meta: { title: '商品管理', icon: 'el-icon-s-shop' },
+    meta: {
+      title: '商品管理',
+      icon: 'el-icon-s-shop'
+    },
     children: [
       {
         name: "Liuwenjing",
@@ -86,44 +91,49 @@ export const allAsyncRoutes = [
         meta: { title: 'My Girlfriend' }
       },
       {
-        name: "Category",
-        path: "category/Category",
+        name: 'Category',
+        path: 'category/Category',
         component: () => import('@/views/product/category/Category'),
-        meta: { title: '商品分类' }
-
+        meta: {
+          title: '商品分类'
+        }
       },
-
       {
-        name: "Trademark",
-        path: "trademark/Trademark",
+        name: 'Trademark',
+        path: 'trademark/Trademark',
         component: () => import('@/views/product/trademark/Trademark'),
-        meta: { title: '品牌管理' }
+        meta: {
+          title: '品牌管理'
+        }
       },
       {
-        name: "Attr",
-        path: "attr/Attr",
+        name: 'Attr',
+        path: 'attr/Attr',
         component: () => import('@/views/product/attr/Attr'),
-        meta: { title: '属性管理' }
+        meta: {
+          title: '属性管理'
+        }
       },
       {
-        name: "Sku",
-        path: "sku/Sku",
-        component: () => import('@/views/product/sku/Sku'),
-        meta: { title: 'SKU' }
-      },
-      {
-        name: "Spu",
-        path: "spu/Spu",
+        name: 'Spu',
+        path: 'spu/Spu',
         component: () => import('@/views/product/spu/Spu'),
-        meta: { title: 'SPU' }
+        meta: {
+          title: 'SPU管理'
+        }
+      },
+      {
+        name: 'Sku',
+        path: 'sku/Sku',
+        component: () => import('@/views/product/sku/Sku'),
+        meta: {
+          title: 'SKU管理'
+        }
       }
     ]
-
-
   },
-
+  // 权限管理
   // access control list
-  //权限管理路由
   {
     name: 'Acl',
     path: '/acl',
@@ -170,20 +180,20 @@ export const allAsyncRoutes = [
       }
     ]
   }
-
 ]
 
-// 创建任意路由
-// 404 page must be placed at the end !!!
-
+/*
+任意路由：任意路由也应该是每个用户都拥有的，并且它应该是放在所有路由的最后面，目前的类型是对象
+*/
 export const anyRoute = { path: '*', redirect: '/404', hidden: true }
 
-
-const createRouter = () => new Router({
-  // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
-})
+// 创建路由器
+const createRouter = () =>
+  new Router({
+    // mode: 'history', // require service support
+    scrollBehavior: () => ({ y: 0 }),
+    routes: constantRoutes // 只用了常量路由
+  })
 
 const router = createRouter()
 
