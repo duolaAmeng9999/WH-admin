@@ -49,8 +49,8 @@ const mutations = {
       !! 此时合并的路由只是放在 state 中的一个数组而已, 并不是路由对象, 最终state.routes 只是用作菜单显示作用
 
     */
-    state.routes = constantRoutes.concat(asyncRoutes,[anyRoute]);
-    router.addRoutes([...asyncRoutes,anyRoute]);
+    state.routes = constantRoutes.concat(asyncRoutes, [anyRoute]);
+    router.addRoutes([...asyncRoutes, anyRoute]);
   }
 }
 
@@ -65,7 +65,7 @@ function filterAsyncRoutes(allAsyncRoutes, routeNames) {
     // 当路由名称数组里包含异步路由的 name 属性时进入 if 判断
     if (routeNames.indexOf(item.name !== -1)) {
       // 这里进行双重判断是因为路由里面包含子路由 children
-      // 当路由里包含 children 并 children 数组的长度不为 0
+      // 当路由里包含 children 并 children 数组的长度不为 0    
       if (item.children && item.children.length) {
         // 递归调用, 将 children 数组里的路由对象进行再次过滤, 调用自身并传值
         item.children = filterAsyncRoutes(item.children, routeNames)

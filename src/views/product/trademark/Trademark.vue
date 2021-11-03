@@ -29,6 +29,7 @@
             type="danger"
             class="el-icon-delete"
             @click="handleDelete(row)"
+            v-if="$hasBP('btn.Trademark.remove_empty')"
             >删除</el-button
           >
         </template>

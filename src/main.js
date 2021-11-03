@@ -28,6 +28,9 @@ Vue.component("SpuForm", SpuForm)
 import SkuForm from "@/components/SkuForm"
 Vue.component("SkuForm", SkuForm)
 
+// 引入全局按钮权限函数
+import { hasBtnPermmission } from '@/utils/permission'
+
 
 /**
  * If you don't want to use mock-server
@@ -49,8 +52,10 @@ Vue.use(ElementUI, { locale })
 
 
 Vue.config.productionTip = false
+// 注册全局统一接口
 Vue.prototype.$API = API;
-
+// 注册全局按钮权限函数
+Vue.prototype.$hasBtn = hasBtnPermmission;
 
 new Vue({
   el: '#app',
