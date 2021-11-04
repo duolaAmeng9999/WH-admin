@@ -1,16 +1,15 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
+    <Analysis></Analysis>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
+import Analysis from "./analysis";
 export default {
   name: "Dashboard",
-  computed: {
-    ...mapGetters(["name"]),
+  components: {
+    Analysis,
   },
 };
 </script>
